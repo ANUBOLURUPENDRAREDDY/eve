@@ -18,8 +18,8 @@ pipeline {
             steps {
                 dir("${FRONTEND_DIR}") {
                     echo 'Installing and building React app...'
-                    sh 'npm install'
-                    sh 'npm run build'
+                    bat 'npm install'
+                    bat 'npm run build'
                 }
             }
         }
@@ -28,7 +28,8 @@ pipeline {
             steps {
                 dir("${BACKEND_DIR}") {
                     echo 'Building Spring Boot app...'
-                    sh './mvnw clean package -DskipTests || mvn clean package -DskipTests'
+                    // Windows batch version of the Maven wrapper command
+                    bat 'mvnw.cmd clean package -DskipTests || mvn clean package -DskipTests'
                 }
             }
         }
@@ -36,8 +37,8 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 echo 'Archiving artifacts...'
-                archiveArtifacts artifacts: "${BACKEND_DIR}/target/*.jar", fingerprint: true
-                archiveArtifacts artifacts: "${FRONTEND_DIR}/build/**", fingerprint: true
+                archiveArtifacts artifacts: "${BACKEND_DIR}\\target\\*.jar", fingerprint: true
+                archiveArtifacts artifacts: "${FRONTEND_DIR}\\build\\**", fingerprint: true
             }
         }
 
